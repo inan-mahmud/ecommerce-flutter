@@ -9,4 +9,8 @@ class AuthHelper {
   static Future<bool> saveToken(String token) async {
     return await cacheService.save(key: authToken, value: token);
   }
+
+  static String? fetchToken() {
+    return cacheService.read(key: authToken);
+  }
 }
