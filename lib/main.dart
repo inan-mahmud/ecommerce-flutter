@@ -1,5 +1,5 @@
 import 'package:ecommerce_flutter/src/core/config/theme.dart';
-import 'package:ecommerce_flutter/src/modules/home/home_screen.dart';
+import 'package:ecommerce_flutter/src/core/routes/app_router.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,10 +11,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    final appRouter = AppRouter();
+    return MaterialApp.router(
       title: 'Flutter Ecommerce',
       theme: AppTheme.dark,
-      home: const HomeScreen(),
+      routerConfig: appRouter.router,
     );
   }
 }
