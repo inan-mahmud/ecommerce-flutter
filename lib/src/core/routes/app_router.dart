@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:ecommerce_flutter/src/core/di/locator.dart';
 import 'package:ecommerce_flutter/src/core/routes/not_found_screen.dart';
-import 'package:ecommerce_flutter/src/core/routes/route_refresh_notifier.dart';
 import 'package:ecommerce_flutter/src/core/routes/routes.dart';
 import 'package:ecommerce_flutter/src/core/utils/helpers/auth_helper.dart';
-import 'package:ecommerce_flutter/src/modules/auth/login_screen.dart';
+import 'package:ecommerce_flutter/src/modules/auth/view/screens/login_screen.dart';
+import 'package:ecommerce_flutter/src/modules/cart/cart_screen.dart';
 import 'package:ecommerce_flutter/src/modules/dashboard/dashrboard_screen.dart';
 import 'package:ecommerce_flutter/src/modules/home/home_screen.dart';
+import 'package:ecommerce_flutter/src/modules/settings/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -25,13 +25,13 @@ class AppRouter {
   AppRouter() {
     _router = GoRouter(
       navigatorKey: _rootNavigatorKey,
-      initialLocation: '/home',
+      initialLocation: Routes.home.path,
       debugLogDiagnostics: true,
-      refreshListenable: locator.get<RouteRefreshNotifier>(),
+      //refreshListenable: locator.get<RouteRefreshNotifier>(),
       observers: [
         _routeObserver,
       ],
-      redirect: _handleRedirect,
+      //redirect: _handleRedirect,
       routes: [
         ShellRoute(
             navigatorKey: _shellNavigatorKey,
@@ -40,12 +40,36 @@ class AppRouter {
                 ),
             routes: [
               GoRoute(
-                path: '/home',
+                path: Routes.home.path,
                 name: Routes.home.name,
                 pageBuilder: (context, state) {
                   return NoTransitionPage(
                     name: state.path,
                     child: HomeScreen(
+                      key: state.pageKey,
+                    ),
+                  );
+                },
+              ),
+              GoRoute(
+                path: Routes.cart.path,
+                name: Routes.cart.name,
+                pageBuilder: (context, state) {
+                  return NoTransitionPage(
+                    name: state.path,
+                    child: CartScreen(
+                      key: state.pageKey,
+                    ),
+                  );
+                },
+              ),
+              GoRoute(
+                path: Routes.settings.path,
+                name: Routes.settings.name,
+                pageBuilder: (context, state) {
+                  return NoTransitionPage(
+                    name: state.path,
+                    child: SettingsScreen(
                       key: state.pageKey,
                     ),
                   );
@@ -72,16 +96,11 @@ class AppRouter {
     final isLoggedIn = AuthHelper.isLoggedIn();
     final matchedLocation = state.matchedLocation;
 
-    if (!isLoggedIn && !_isGoingToLoginOrRegister(matchedLocation)) {
-      return '/login';
-    } else if (isLoggedIn && _isGoingToLoginOrRegister(matchedLocation)) {
-      return '/home';
+    if (!isLoggedIn) {
+      return matchedLocation == '/login' ? null : '/login';
+    } else {
+      return matchedLocation == '/login' ? '/home' : null;
     }
-    return null;
-  }
-
-  bool _isGoingToLoginOrRegister(String matchedLocation) {
-    return matchedLocation == '/login' || matchedLocation == '/register';
   }
 
   GoRouter get router => _router;
