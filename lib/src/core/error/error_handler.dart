@@ -1,32 +1,46 @@
-import 'dart:async';
-import 'dart:io';
-
 import 'package:dio/dio.dart';
+import 'package:ecommerce_flutter/src/core/error/error_types.dart';
+import 'package:ecommerce_flutter/src/core/error/failure.dart';
+import 'package:ecommerce_flutter/src/core/utils/constants/response_code.dart';
 
-class ApiErrorHandler {
-  static const Map<DioErrorType, String> errorMessages = {
-    DioErrorType.connectionTimeout: 'Connection timeout.',
-    DioErrorType.receiveTimeout: 'Receive timeout.',
-    DioErrorType.sendTimeout: 'Send timeout.',
-    DioErrorType.cancel: 'Request cancelled.',
-    DioErrorType.badResponse: 'Something went wrong, Please try again later',
-    DioErrorType.unknown: 'Unknown error',
-    DioErrorType.badCertificate:
-        "The security certificate for this website is not valid. Please contact the website administrator for more information"
-  };
+class ErrorHandler implements Exception {
+  late Failure failure;
 
-  String getErrorMessage(dynamic error) {
-    switch (error.runtimeType) {
-      case DioError:
-        return errorMessages[error.type] ?? 'Unknown error.';
-      case FormatException:
-        return 'Invalid response format.';
-      case TimeoutException:
-        return 'Request timeout.';
-      case HttpException:
-        return 'Http error ${error.statusCode}.';
+  ErrorHandler.handleError(Object error) {
+    if (error is DioError) {
+      failure = _handleDioError(error);
+    } else {
+      failure = ErrorTypes.defaultError.failure;
+    }
+  }
+
+  Failure _handleDioError(DioError error) {
+    switch (error.type) {
+      case DioErrorType.connectionTimeout:
+      case DioErrorType.sendTimeout:
+      case DioErrorType.receiveTimeout:
+        return ErrorTypes.connectTimeout.failure;
+      case DioErrorType.badResponse:
+        switch (error.response?.statusCode) {
+          case ResponseCode.badRequest:
+            return ErrorTypes.badRequest.failure;
+          case ResponseCode.forbidden:
+            return ErrorTypes.forbidden.failure;
+          case ResponseCode.unauthorised:
+            return ErrorTypes.unauthorised.failure;
+          case ResponseCode.notFound:
+            return ErrorTypes.notFound.failure;
+          case ResponseCode.internalServerError:
+            return ErrorTypes.internalServerError.failure;
+          default:
+            return ErrorTypes.defaultError.failure;
+        }
+      case DioErrorType.cancel:
+        return ErrorTypes.cancel.failure;
+      case DioErrorType.unknown:
+        return ErrorTypes.defaultError.failure;
       default:
-        return 'Unknown error.';
+        return ErrorTypes.defaultError.failure;
     }
   }
 }
