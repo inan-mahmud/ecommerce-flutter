@@ -24,6 +24,9 @@ class AppTheme {
     ),
     focusColor: Colors.black,
     primaryColor: AppColors.greenColor,
+    inputDecorationTheme: InputDecorationTheme(
+      
+    ),
     textTheme: const TextTheme(
       displayLarge: TextStyle(
           color: Colors.white, fontSize: 36, fontWeight: FontWeight.w500),

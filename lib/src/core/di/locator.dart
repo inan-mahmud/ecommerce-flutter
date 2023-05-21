@@ -35,7 +35,7 @@ _initializeRouteListenable() {
 Dio _configureDio() {
   final dio = Dio();
   dio.options = BaseOptions(
-    baseUrl: '',
+    baseUrl: 'https://fakestoreapi.com',
     connectTimeout: const Duration(milliseconds: 5000),
     receiveTimeout: const Duration(milliseconds: 5000),
   );

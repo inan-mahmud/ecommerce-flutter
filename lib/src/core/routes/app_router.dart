@@ -34,7 +34,17 @@ class AppRouter {
       observers: [
         _routeObserver,
       ],
-      redirect: _handleRedirect,
+      redirect: ((context, state) {
+        final isLoggedIn = _refreshNotifier.loginState;
+
+        final matchedLocation = state.matchedLocation;
+
+        if (!isLoggedIn) {
+          return matchedLocation == '/login' ? null : '/login';
+        } else {
+          return matchedLocation == '/login' ? '/home' : null;
+        }
+      }),
       routes: [
         ShellRoute(
             navigatorKey: _shellNavigatorKey,
@@ -103,9 +113,9 @@ class AppRouter {
     final matchedLocation = state.matchedLocation;
 
     if (!isLoggedIn) {
-      return matchedLocation == loginLocation ? null : loginLocation;
+      return matchedLocation == '/login' ? null : '/login';
     } else {
-      return matchedLocation == loginLocation ? homeLocation : null;
+      return matchedLocation == '/login' ? '/home' : null;
     }
   }
 
