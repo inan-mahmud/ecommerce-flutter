@@ -1,4 +1,6 @@
-sealed class ApiResponse<L, R> {}
+sealed class ApiResponse<L, R> {
+  
+}
 
 class ApiError<L, R> extends ApiResponse<L, R> {
   final L value;
@@ -12,5 +14,5 @@ class ApiSuccess<L, R> extends ApiResponse<L, R> {
   ApiSuccess(this.value);
 }
 
-ApiResponse<L, R> E<L, R>(L value) => ApiError(value);
+ApiResponse<L, R> left<L, R>(L value) => ApiError(value);
 ApiResponse<L, R> right<L, R>(R value) => ApiSuccess(value);

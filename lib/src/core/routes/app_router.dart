@@ -93,14 +93,14 @@ class AppRouter {
     );
   }
   FutureOr<String?> _handleRedirect(BuildContext context, GoRouterState state) {
-    final isLoggedIn = AuthHelper.isLoggedIn();
-    final matchedLocation = state.matchedLocation;
+    // final isLoggedIn = AuthHelper.isLoggedIn();
+    // final matchedLocation = state.matchedLocation;
 
-    if (!isLoggedIn) {
-      return matchedLocation == '/login' ? null : '/login';
-    } else {
-      return matchedLocation == '/login' ? '/home' : null;
-    }
+    // if (!isLoggedIn) {
+    //   return matchedLocation == '/login' ? null : '/login';
+    // } else {
+    //   return matchedLocation == '/login' ? '/home' : null;
+    // }
   }
 
   GoRouter get router => _router;

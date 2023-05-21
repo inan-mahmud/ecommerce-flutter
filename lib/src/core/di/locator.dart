@@ -25,7 +25,6 @@ _initializeApiClient() {
   locator.registerLazySingleton<ApiInterface>(() => ApiService(dio));
 }
 
-
 Dio _configureDio() {
   final dio = Dio();
   dio.options = BaseOptions(
