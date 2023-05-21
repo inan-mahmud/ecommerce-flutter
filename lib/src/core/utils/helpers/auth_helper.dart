@@ -1,4 +1,3 @@
-
 import 'package:ecommerce_flutter/src/core/di/locator.dart';
 import 'package:ecommerce_flutter/src/core/services/cache/cache_interface.dart';
 
@@ -16,9 +15,13 @@ class AuthHelper {
     return _cacheService.read(key: authToken);
   }
 
-  // static Future<bool> saveUser(String user) async {
-  //   return await _cacheService.save(key: loginKey, value: user);
-  // }
+  static Future<bool> saveLoginState(bool loginState) async {
+    return await _cacheService.save(key: loginKey, value: loginState);
+  }
+
+  static bool? fetchLoginState() {
+    return _cacheService.read(key: loginKey);
+  }
 
   // static AuthRequest? fetchUser() {
   //   final result = _cacheService.read(key: loginKey);

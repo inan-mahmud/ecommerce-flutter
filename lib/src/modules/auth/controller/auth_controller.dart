@@ -1,4 +1,7 @@
 import 'package:ecommerce_flutter/src/core/base/response.dart';
+import 'package:ecommerce_flutter/src/core/config/app_strings.dart';
+import 'package:ecommerce_flutter/src/core/di/locator.dart';
+import 'package:ecommerce_flutter/src/core/routes/route_refresh_notifier.dart';
 import 'package:ecommerce_flutter/src/modules/auth/controller/auth_listener.dart';
 import 'package:ecommerce_flutter/src/modules/auth/data/models/request/auth_request.dart';
 import 'package:ecommerce_flutter/src/modules/auth/data/repositories/auth_repository.dart';
@@ -7,6 +10,8 @@ class AuthController {
   final AuthListener? _authListener;
 
   final AuthRepository _authRepository = AuthRepository();
+
+  final _refreshNotifier = locator.get<RouteRefreshNotifier>();
 
   AuthController(this._authListener);
 
@@ -19,10 +24,14 @@ class AuthController {
     final response = await _authRepository.signIn(authRequest);
     switch (response) {
       case ApiSuccess():
-        _authListener?.onSignInSuccess("Logged In Successfully");
-
+        _onSuccess();
       case ApiError():
         _authListener?.onSignInError(response.value.message);
     }
+  }
+
+  void _onSuccess() {
+    _authListener?.onSignInSuccess(AppStrings.loginSuccessMessage);
+    _refreshNotifier.updateLoginState(true);
   }
 }

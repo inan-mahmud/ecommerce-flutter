@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:ecommerce_flutter/src/core/routes/route_refresh_notifier.dart';
 import 'package:ecommerce_flutter/src/core/services/api/api_interceptor.dart';
 import 'package:ecommerce_flutter/src/core/services/api/api_interface.dart';
 import 'package:ecommerce_flutter/src/core/services/api/api_service.dart';
@@ -12,6 +13,7 @@ final locator = GetIt.instance;
 
 Future<void> init() async {
   _initializeCache();
+  _initializeRouteListenable();
   _initializeApiClient();
 }
 
@@ -23,6 +25,11 @@ _initializeCache() async {
 _initializeApiClient() {
   final dio = _configureDio();
   locator.registerLazySingleton<ApiInterface>(() => ApiService(dio));
+}
+
+_initializeRouteListenable() {
+  locator.registerLazySingleton<RouteRefreshNotifier>(
+      () => RouteRefreshNotifier());
 }
 
 Dio _configureDio() {
