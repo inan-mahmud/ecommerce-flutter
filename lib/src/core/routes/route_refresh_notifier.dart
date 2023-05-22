@@ -3,6 +3,12 @@ import 'package:flutter/material.dart';
 
 class RouteRefreshNotifier extends ChangeNotifier {
   bool loginState = false;
+  
+
+  Future<void> onAppStart() async {
+    loginState = AuthHelper.fetchLoginState() ?? false;
+    notifyListeners();
+  }
 
   void updateLoginState(bool state) async {
     await AuthHelper.saveLoginState(state);

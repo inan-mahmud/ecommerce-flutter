@@ -12,14 +12,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 final locator = GetIt.instance;
 
 Future<void> init() async {
-  _initializeCache();
+  await _initializeCache();
   _initializeRouteListenable();
   _initializeApiClient();
 }
 
 _initializeCache() async {
-  final prefs = await SharedPreferences.getInstance();
-  locator.registerLazySingleton<CacheInterface>(() => CacheService(prefs));
+  locator.registerSingletonAsync<SharedPreferences>(() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs;
+  });
+
+  locator.registerSingletonWithDependencies<CacheInterface>(
+      () => CacheService(),
+      dependsOn: [SharedPreferences]);
 }
 
 _initializeApiClient() {

@@ -1,5 +1,6 @@
 import 'package:ecommerce_flutter/src/core/common/primary_button.dart';
 import 'package:ecommerce_flutter/src/core/config/app_sizes.dart';
+import 'package:ecommerce_flutter/src/core/config/colors.dart';
 import 'package:ecommerce_flutter/src/core/utils/helpers/dialog_helper.dart';
 import 'package:ecommerce_flutter/src/core/utils/helpers/snackbar_helper.dart';
 import 'package:ecommerce_flutter/src/modules/auth/controller/auth_controller.dart';
@@ -30,13 +31,20 @@ class _LoginScreenState extends State<LoginScreen> implements AuthListener {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextFormField(
               controller: _usernameController,
+              style: const TextStyle(
+                color: AppColors.whiteColor,
+              ),
             ),
             gapH24,
             TextFormField(
               controller: _passwordController,
+              style: const TextStyle(
+                color: AppColors.whiteColor,
+              ),
             ),
             gapH24,
             PrimaryButton(

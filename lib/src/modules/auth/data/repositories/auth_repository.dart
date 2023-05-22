@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:ecommerce_flutter/src/core/base/response.dart';
 import 'package:ecommerce_flutter/src/core/di/locator.dart';
 import 'package:ecommerce_flutter/src/core/error/error_handler.dart';
@@ -18,8 +16,10 @@ class AuthRepository {
       final response =
           await apiClient.post(Endpoints.loginEndPoint, data: request.toMap());
 
-      final token = TokenModel.fromJson(json.decode(response.data));
+      final token = TokenModel.fromMap(response.data);
+
       final tokenSaved = await AuthHelper.saveToken(token.token);
+
       if (tokenSaved) {
         return right(token);
       }

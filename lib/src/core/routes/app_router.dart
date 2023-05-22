@@ -4,6 +4,7 @@ import 'package:ecommerce_flutter/src/core/di/locator.dart';
 import 'package:ecommerce_flutter/src/core/routes/not_found_screen.dart';
 import 'package:ecommerce_flutter/src/core/routes/route_refresh_notifier.dart';
 import 'package:ecommerce_flutter/src/core/routes/routes.dart';
+import 'package:ecommerce_flutter/src/core/splash/splash_screen.dart';
 import 'package:ecommerce_flutter/src/modules/auth/view/screens/login_screen.dart';
 import 'package:ecommerce_flutter/src/modules/cart/cart_screen.dart';
 import 'package:ecommerce_flutter/src/modules/dashboard/dashrboard_screen.dart';
@@ -34,17 +35,7 @@ class AppRouter {
       observers: [
         _routeObserver,
       ],
-      redirect: ((context, state) {
-        final isLoggedIn = _refreshNotifier.loginState;
-
-        final matchedLocation = state.matchedLocation;
-
-        if (!isLoggedIn) {
-          return matchedLocation == '/login' ? null : '/login';
-        } else {
-          return matchedLocation == '/login' ? '/home' : null;
-        }
-      }),
+      redirect: _handleRedirect,
       routes: [
         ShellRoute(
             navigatorKey: _shellNavigatorKey,
@@ -90,6 +81,16 @@ class AppRouter {
               ),
             ]),
         GoRoute(
+            path: Routes.splash.path,
+            parentNavigatorKey: _rootNavigatorKey,
+            name: Routes.splash.name,
+            pageBuilder: (context, state) {
+              return NoTransitionPage(
+                name: state.path,
+                child: const SplashScreen(),
+              );
+            }),
+        GoRoute(
           path: Routes.login.path,
           parentNavigatorKey: _rootNavigatorKey,
           name: Routes.login.name,
@@ -106,16 +107,17 @@ class AppRouter {
     );
   }
   FutureOr<String?> _handleRedirect(BuildContext context, GoRouterState state) {
-    final loginLocation = state.namedLocation(Routes.login.path);
-    final homeLocation = state.namedLocation(Routes.home.path);
+    final loginLocation = state.namedLocation(Routes.login.name);
+    final homeLocation = state.namedLocation(Routes.home.name);
+    final splashLocation = state.namedLocation(Routes.splash.name);
     final isLoggedIn = _refreshNotifier.loginState;
 
     final matchedLocation = state.matchedLocation;
 
     if (!isLoggedIn) {
-      return matchedLocation == '/login' ? null : '/login';
+      return matchedLocation == loginLocation ? null : loginLocation;
     } else {
-      return matchedLocation == '/login' ? '/home' : null;
+      return matchedLocation == loginLocation ? homeLocation : null;
     }
   }
 

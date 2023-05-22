@@ -24,8 +24,10 @@ class AppTheme {
     ),
     focusColor: Colors.black,
     primaryColor: AppColors.greenColor,
-    inputDecorationTheme: InputDecorationTheme(
-      
+    inputDecorationTheme: const InputDecorationTheme(
+      border: OutlineInputBorder(),
+      labelStyle: TextStyle(color: Colors.blue),
+      hintStyle: TextStyle(color: Colors.grey),
     ),
     textTheme: const TextTheme(
       displayLarge: TextStyle(

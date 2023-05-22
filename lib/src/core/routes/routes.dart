@@ -1,4 +1,5 @@
 enum Routes {
+  splash,
   login,
   home,
   cart,
@@ -8,6 +9,8 @@ enum Routes {
 extension RouteProperties on Routes {
   String get path {
     switch (this) {
+      case Routes.splash:
+        return '/splash';
       case Routes.login:
         return '/login';
       case Routes.home:
@@ -21,6 +24,8 @@ extension RouteProperties on Routes {
 
   String get name {
     switch (this) {
+      case Routes.splash:
+        return 'splash';
       case Routes.login:
         return 'login';
       case Routes.home:
