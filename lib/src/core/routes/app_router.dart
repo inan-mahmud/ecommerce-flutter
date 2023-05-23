@@ -109,8 +109,7 @@ class AppRouter {
   FutureOr<String?> _handleRedirect(BuildContext context, GoRouterState state) {
     final loginLocation = state.namedLocation(Routes.login.name);
     final homeLocation = state.namedLocation(Routes.home.name);
-    final splashLocation = state.namedLocation(Routes.splash.name);
-    final isLoggedIn = _refreshNotifier.loginState;
+    final isLoggedIn = _refreshNotifier.loginState!;
 
     final matchedLocation = state.matchedLocation;
 

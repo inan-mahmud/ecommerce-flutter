@@ -12,8 +12,9 @@ class EcommerceApp extends StatefulWidget {
 }
 
 class _EcommerceAppState extends State<EcommerceApp> {
-  
   late RouteRefreshNotifier _notifier;
+
+  final _appRouter = locator.get<AppRouter>();
 
   @override
   void initState() {
@@ -28,11 +29,10 @@ class _EcommerceAppState extends State<EcommerceApp> {
 
   @override
   Widget build(BuildContext context) {
-    final appRouter = AppRouter();
     return MaterialApp.router(
       title: 'Flutter Ecommerce',
       theme: AppTheme.dark,
-      routerConfig: appRouter.router,
+      routerConfig: _appRouter.router,
     );
   }
 }
