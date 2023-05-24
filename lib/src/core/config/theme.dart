@@ -29,6 +29,20 @@ class AppTheme {
       labelStyle: TextStyle(color: Colors.blue),
       hintStyle: TextStyle(color: Colors.grey),
     ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      selectedIconTheme: IconThemeData(
+        color: AppColors.whiteColor,
+      ),
+      unselectedIconTheme: IconThemeData(
+        color: AppColors.greyColor,
+      ),
+      selectedLabelStyle: TextStyle(
+        color: AppColors.whiteColor,
+      ),
+      unselectedLabelStyle: TextStyle(
+        color: AppColors.greyColor,
+      ),
+    ),
     textTheme: const TextTheme(
       displayLarge: TextStyle(
           color: Colors.white, fontSize: 36, fontWeight: FontWeight.w500),

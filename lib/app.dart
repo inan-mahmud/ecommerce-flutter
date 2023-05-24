@@ -12,13 +12,12 @@ class EcommerceApp extends StatefulWidget {
 }
 
 class _EcommerceAppState extends State<EcommerceApp> {
-  late RouteRefreshNotifier _notifier;
+  final RouteRefreshNotifier _notifier = locator.get<RouteRefreshNotifier>();
 
   final _appRouter = locator.get<AppRouter>();
 
   @override
   void initState() {
-    _notifier = locator.get<RouteRefreshNotifier>();
     _onAppStart();
     super.initState();
   }

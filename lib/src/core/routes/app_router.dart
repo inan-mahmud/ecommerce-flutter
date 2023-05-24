@@ -7,19 +7,24 @@ import 'package:ecommerce_flutter/src/core/routes/routes.dart';
 import 'package:ecommerce_flutter/src/core/splash/splash_screen.dart';
 import 'package:ecommerce_flutter/src/modules/auth/view/screens/login_screen.dart';
 import 'package:ecommerce_flutter/src/modules/cart/cart_screen.dart';
+import 'package:ecommerce_flutter/src/modules/categories/categories_screen.dart';
 import 'package:ecommerce_flutter/src/modules/dashboard/dashrboard_screen.dart';
 import 'package:ecommerce_flutter/src/modules/home/home_screen.dart';
 import 'package:ecommerce_flutter/src/modules/settings/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-enum NavigatorKey { root, shell }
+enum NavigatorKey { root, home, cart, settings }
 
 class AppRouter {
   final GlobalKey<NavigatorState> _rootNavigatorKey =
       GlobalKey<NavigatorState>(debugLabel: NavigatorKey.root.name);
-  final GlobalKey<NavigatorState> _shellNavigatorKey =
-      GlobalKey<NavigatorState>(debugLabel: NavigatorKey.shell.name);
+  final GlobalKey<NavigatorState> _homeNavigatorKey =
+      GlobalKey<NavigatorState>(debugLabel: NavigatorKey.home.name);
+  final GlobalKey<NavigatorState> _cartNavigatorKey =
+      GlobalKey<NavigatorState>(debugLabel: NavigatorKey.cart.name);
+  final GlobalKey<NavigatorState> _settingsNavigatorKey =
+      GlobalKey<NavigatorState>(debugLabel: NavigatorKey.settings.name);
   final RouteObserver<PageRoute> _routeObserver = RouteObserver<PageRoute>();
 
   late GoRouter _router;
@@ -37,49 +42,74 @@ class AppRouter {
       ],
       redirect: _handleRedirect,
       routes: [
-        ShellRoute(
-            navigatorKey: _shellNavigatorKey,
-            builder: (context, state, child) => DashboardScreen(
-                  child: child,
+        StatefulShellRoute.indexedStack(
+          builder: (context, state, navigationShell) {
+            return DashboardScreen(
+              navigationShell: navigationShell,
+            );
+          },
+          branches: <StatefulShellBranch>[
+            StatefulShellBranch(
+              navigatorKey: _homeNavigatorKey,
+              routes: <RouteBase>[
+                GoRoute(
+                  path: Routes.home.path,
+                  name: Routes.home.name,
+                  pageBuilder: (context, state) {
+                    return NoTransitionPage(
+                      name: state.path,
+                      child: HomeScreen(
+                        key: state.pageKey,
+                        categoriesPath: Routes.home.branchPath!,
+                      ),
+                    );
+                  },
+                  routes: <RouteBase>[
+                    GoRoute(
+                      path: Routes.home.branchName,
+                      builder: (BuildContext context, GoRouterState state) =>
+                          const CategoriesScreen(),
+                    ),
+                  ],
                 ),
-            routes: [
-              GoRoute(
-                path: Routes.home.path,
-                name: Routes.home.name,
-                pageBuilder: (context, state) {
-                  return NoTransitionPage(
-                    name: state.path,
-                    child: HomeScreen(
-                      key: state.pageKey,
-                    ),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Routes.cart.path,
-                name: Routes.cart.name,
-                pageBuilder: (context, state) {
-                  return NoTransitionPage(
-                    name: state.path,
-                    child: CartScreen(
-                      key: state.pageKey,
-                    ),
-                  );
-                },
-              ),
-              GoRoute(
-                path: Routes.settings.path,
-                name: Routes.settings.name,
-                pageBuilder: (context, state) {
-                  return NoTransitionPage(
-                    name: state.path,
-                    child: SettingsScreen(
-                      key: state.pageKey,
-                    ),
-                  );
-                },
-              ),
-            ]),
+              ],
+            ),
+            StatefulShellBranch(
+              navigatorKey: _cartNavigatorKey,
+              routes: <RouteBase>[
+                GoRoute(
+                  path: Routes.cart.path,
+                  name: Routes.cart.name,
+                  pageBuilder: (context, state) {
+                    return NoTransitionPage(
+                      name: state.path,
+                      child: CartScreen(
+                        key: state.pageKey,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              navigatorKey: _settingsNavigatorKey,
+              routes: <RouteBase>[
+                GoRoute(
+                  path: Routes.settings.path,
+                  name: Routes.settings.name,
+                  pageBuilder: (context, state) {
+                    return NoTransitionPage(
+                      name: state.path,
+                      child: SettingsScreen(
+                        key: state.pageKey,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
         GoRoute(
             path: Routes.splash.path,
             parentNavigatorKey: _rootNavigatorKey,
@@ -121,10 +151,4 @@ class AppRouter {
   }
 
   GoRouter get router => _router;
-
-  GlobalKey<NavigatorState> get rootNavigatorKey => _rootNavigatorKey;
-
-  GlobalKey<NavigatorState> get shellNavigatorKey => _shellNavigatorKey;
-
-  RouteObserver<PageRoute> get routeObserver => _routeObserver;
 }

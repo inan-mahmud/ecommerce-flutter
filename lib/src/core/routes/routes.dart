@@ -3,7 +3,7 @@ enum Routes {
   login,
   home,
   cart,
-  settings,
+  settings;
 }
 
 extension RouteProperties on Routes {
@@ -35,5 +35,24 @@ extension RouteProperties on Routes {
       case Routes.settings:
         return 'settings';
     }
+  }
+
+  String? get branchPath {
+    switch (this) {
+      case Routes.splash:
+        return null;
+      case Routes.login:
+        return null;
+      case Routes.home:
+        return '/home/categories';
+      case Routes.cart:
+        return null;
+      case Routes.settings:
+        return null;
+    }
+  }
+
+  String get branchName {
+    return branchPath?.split('/').last ?? '';
   }
 }

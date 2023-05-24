@@ -9,8 +9,8 @@ class CacheService<T> implements CacheInterface<T> {
     _init();
   }
 
-  void _init() async {
-    preferences = await locator.getAsync<SharedPreferences>();
+  void _init() {
+    preferences = locator.get<SharedPreferences>();
   }
 
   @override
