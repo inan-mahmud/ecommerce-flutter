@@ -1,17 +1,10 @@
-import 'package:ecommerce_flutter/src/core/di/locator.dart';
 import 'package:ecommerce_flutter/src/core/services/cache/cache_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CacheService<T> implements CacheInterface<T> {
-  late SharedPreferences preferences;
+  final SharedPreferences preferences;
 
-  CacheService() {
-    _init();
-  }
-
-  void _init() {
-    preferences = locator.get<SharedPreferences>();
-  }
+  CacheService(this.preferences);
 
   @override
   bool containsKey({required String key}) {

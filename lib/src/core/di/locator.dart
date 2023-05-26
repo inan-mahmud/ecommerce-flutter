@@ -13,21 +13,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 final locator = GetIt.instance;
 
 Future<void> init() async {
-  await _initializeCache();
   _initializeRouteListenable();
   _initializeRouter();
   _initializeApiClient();
 }
 
-_initializeCache() async {
-  locator.registerSingletonAsync<SharedPreferences>(() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs;
-  });
-
-  locator.registerSingletonWithDependencies<CacheInterface>(
-      () => CacheService(),
-      dependsOn: [SharedPreferences]);
+initializeCache(SharedPreferences preferences) async {
+  locator.registerLazySingleton<CacheInterface>(
+    () => CacheService(preferences),
+  );
 }
 
 _initializeApiClient() {
@@ -36,12 +30,14 @@ _initializeApiClient() {
 }
 
 _initializeRouteListenable() {
-  locator.registerLazySingleton<RouteRefreshNotifier>(
-      () => RouteRefreshNotifier());
+  locator.registerSingletonWithDependencies<RouteRefreshNotifier>(
+      () => RouteRefreshNotifier(),
+      dependsOn: [CacheInterface]);
 }
 
 _initializeRouter() {
-  locator.registerLazySingleton<AppRouter>(() => AppRouter());
+  locator.registerSingletonWithDependencies<AppRouter>(() => AppRouter(),
+      dependsOn: [RouteRefreshNotifier, CacheInterface]);
 }
 
 Dio _configureDio() {

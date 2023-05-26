@@ -8,7 +8,11 @@ class AuthHelper {
   static final _cacheService = locator<CacheInterface>();
 
   static Future<bool> saveToken(String token) async {
-    return await _cacheService.save(key: authToken, value: token);
+    try {
+      return await _cacheService.save(key: authToken, value: token);
+    } catch (e) {
+      return Future.value(false);
+    }
   }
 
   static String? fetchToken() {
@@ -19,17 +23,9 @@ class AuthHelper {
     return await _cacheService.save(key: loginKey, value: loginState);
   }
 
-  static bool? fetchLoginState() {
-    return _cacheService.read(key: loginKey);
+  static bool fetchLoginState() {
+    return _cacheService.read(key: loginKey) ?? false;
   }
-
-  // static AuthRequest? fetchUser() {
-  //   final result = _cacheService.read(key: loginKey);
-  //   if (result == null) {
-  //     return null;
-  //   }
-  //   return AuthRequest.fromJson(json.decode(result));
-  // }
 
   static Future<bool> deleteToken() async {
     return await _cacheService.delete(key: authToken);

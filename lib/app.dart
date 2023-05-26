@@ -4,6 +4,8 @@ import 'package:ecommerce_flutter/src/core/routes/app_router.dart';
 import 'package:ecommerce_flutter/src/core/routes/route_refresh_notifier.dart';
 import 'package:flutter/material.dart';
 
+
+
 class EcommerceApp extends StatefulWidget {
   const EcommerceApp({super.key});
 
@@ -12,26 +14,22 @@ class EcommerceApp extends StatefulWidget {
 }
 
 class _EcommerceAppState extends State<EcommerceApp> {
-  final RouteRefreshNotifier _notifier = locator.get<RouteRefreshNotifier>();
-
-  final _appRouter = locator.get<AppRouter>();
-
   @override
   void initState() {
     _onAppStart();
     super.initState();
   }
 
-  _onAppStart() async {
-    await _notifier.onAppStart();
+  void _onAppStart() async {
+    await locator.get<RouteRefreshNotifier>().onAppStart();
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Flutter Ecommerce',
-      theme: AppTheme.dark,
-      routerConfig: _appRouter.router,
+      theme: AppTheme.light,
+      routerConfig: locator.get<AppRouter>().router,
     );
   }
 }

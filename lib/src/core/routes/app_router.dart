@@ -137,17 +137,27 @@ class AppRouter {
     );
   }
   FutureOr<String?> _handleRedirect(BuildContext context, GoRouterState state) {
-    final loginLocation = state.namedLocation(Routes.login.name);
-    final homeLocation = state.namedLocation(Routes.home.name);
-    final isLoggedIn = _refreshNotifier.loginState;
+    // final loginLocation = state.namedLocation(Routes.login.name);
+    // final homeLocation = state.namedLocation(Routes.home.name);
+    final splashLocation = state.namedLocation(Routes.splash.name);
+    // final isLoggedIn = _refreshNotifier.loginState;
+    final isInitialized = _refreshNotifier.initialized;
 
     final matchedLocation = state.matchedLocation;
 
-    if (!isLoggedIn) {
-      return matchedLocation == loginLocation ? null : loginLocation;
-    } else {
-      return matchedLocation == loginLocation ? homeLocation : null;
+    // final isGoingToLogin = matchedLocation == loginLocation;
+    final isGoingToInit = matchedLocation == splashLocation;
+
+    if (!isInitialized && !isGoingToInit) {
+      return splashLocation;
     }
+    // } else if (isInitialized && !isLoggedIn && !isGoingToLogin) {
+    //   return loginLocation;
+    // } else if ((isLoggedIn && isGoingToLogin) ||
+    //     (isInitialized && isGoingToInit)) {
+    //   return homeLocation;
+    // }
+    return null;
   }
 
   GoRouter get router => _router;

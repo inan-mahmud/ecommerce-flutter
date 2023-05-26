@@ -1,8 +1,10 @@
-import 'package:ecommerce_flutter/app.dart';
+import 'dart:async';
+
 import 'package:ecommerce_flutter/src/core/di/locator.dart';
 import 'package:ecommerce_flutter/src/flavors/app_environment.dart';
 import 'package:ecommerce_flutter/src/flavors/build_config.dart';
 import 'package:ecommerce_flutter/src/flavors/env_config.dart';
+import 'package:ecommerce_flutter/init_app.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
@@ -19,5 +21,5 @@ Future<void> main() async {
     envConfig: devConfig,
   );
 
-  runApp(const EcommerceApp());
+  initApp();
 }

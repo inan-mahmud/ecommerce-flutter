@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class RouteRefreshNotifier extends ChangeNotifier {
   bool? _loginState;
+  bool? _initialized;
 
   Future<void> onAppStart() async {
     _loginState = AuthHelper.fetchLoginState();
@@ -15,5 +16,11 @@ class RouteRefreshNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  void initialize(bool value) {
+    _initialized = value;
+    notifyListeners();
+  }
+
   bool get loginState => _loginState ?? false;
+  bool get initialized => _initialized ?? false;
 }

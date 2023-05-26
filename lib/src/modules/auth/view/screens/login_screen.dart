@@ -1,5 +1,4 @@
 import 'package:ecommerce_flutter/src/core/common/primary_button.dart';
-import 'package:ecommerce_flutter/src/core/config/app_sizes.dart';
 import 'package:ecommerce_flutter/src/core/config/colors.dart';
 import 'package:ecommerce_flutter/src/core/utils/helpers/dialog_helper.dart';
 import 'package:ecommerce_flutter/src/core/utils/helpers/snackbar_helper.dart';
@@ -28,36 +27,69 @@ class _LoginScreenState extends State<LoginScreen> implements AuthListener {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextFormField(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: const Text(
+              "LOGIN",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF2661FA),
+                  fontSize: 36),
+              textAlign: TextAlign.left,
+            ),
+          ),
+          SizedBox(height: size.height * 0.03),
+          Container(
+            alignment: Alignment.center,
+            margin: const EdgeInsets.symmetric(horizontal: 40),
+            child: TextFormField(
+              decoration: const InputDecoration(
+                labelText: "Username",
+              ),
               controller: _usernameController,
               style: const TextStyle(
-                color: AppColors.whiteColor,
+                color: AppColors.blackColor,
               ),
             ),
-            gapH24,
-            TextFormField(
+          ),
+          SizedBox(height: size.height * 0.03),
+          Container(
+            alignment: Alignment.center,
+            margin: const EdgeInsets.symmetric(horizontal: 40),
+            child: TextFormField(
+              decoration: const InputDecoration(
+                labelText: "Password",
+              ),
               controller: _passwordController,
               style: const TextStyle(
-                color: AppColors.whiteColor,
+                color: AppColors.blackColor,
               ),
+              obscureText: true,
             ),
-            gapH24,
-            PrimaryButton(
-              child: const Text('Log In'),
+          ),
+          SizedBox(height: size.height * 0.05),
+          Container(
+            alignment: Alignment.centerRight,
+            margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+            child: PrimaryButton(
               onPressed: () {
                 _controller?.signIn(
-                  _usernameController.text,
-                  _passwordController.text,
-                );
+                    _usernameController.text, _passwordController.text);
               },
-            )
-          ],
-        ),
+              child: const Text(
+                "LOGIN",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
