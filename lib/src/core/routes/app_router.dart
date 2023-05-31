@@ -16,7 +16,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-enum NavigatorKey { root, home, cart, settings }
+
 
 class AppRouter {
   GoRouter get router => _router;
