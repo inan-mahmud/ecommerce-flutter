@@ -1,5 +1,7 @@
 import 'package:ecommerce_flutter/src/core/common/primary_button.dart';
 import 'package:ecommerce_flutter/src/core/config/colors.dart';
+import 'package:ecommerce_flutter/src/core/di/service_locator.dart';
+import 'package:ecommerce_flutter/src/core/routes/route_refresh_notifier.dart';
 import 'package:ecommerce_flutter/src/core/utils/helpers/dialog_helper.dart';
 import 'package:ecommerce_flutter/src/core/utils/helpers/snackbar_helper.dart';
 import 'package:ecommerce_flutter/src/modules/auth/controller/auth_controller.dart';
@@ -101,8 +103,10 @@ class _LoginScreenState extends State<LoginScreen> implements AuthListener {
   }
 
   @override
-  void onSignInSuccess(String message) {
+  void onSignInSuccess(String message) async {
     SnackbarHelper.showSnackBar(context, message);
+    await serviceLocator.get<RouteRefreshNotifier>().updateLoginState(true);
+    if (!mounted) return;
     _dismissDialog();
   }
 

@@ -10,34 +10,47 @@ import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final locator = GetIt.instance;
+final serviceLocator = GetIt.instance;
 
-Future<void> init() async {
-  _initializeRouteListenable();
-  _initializeRouter();
-  _initializeApiClient();
+Future<void> setUpLocators() async {
+  _setUpCacheService();
+  _setUpRouteNotifier();
+  _setUpAppRouter();
+  _setUpApiClient();
 }
 
-initializeCache(SharedPreferences preferences) async {
-  locator.registerLazySingleton<CacheInterface>(
-    () => CacheService(preferences),
+void _setUpApiClient() {
+  final dio = _configureDio();
+  serviceLocator.registerLazySingleton<ApiInterface>(
+    () => ApiService(dio),
   );
 }
 
-_initializeApiClient() {
-  final dio = _configureDio();
-  locator.registerLazySingleton<ApiInterface>(() => ApiService(dio));
+_setUpCacheService() async {
+  serviceLocator.registerSingletonAsync<SharedPreferences>(() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs;
+  });
+
+  serviceLocator.registerLazySingleton<CacheInterface>(
+    () => CacheService(
+      serviceLocator<SharedPreferences>(),
+    ),
+  );
 }
 
-_initializeRouteListenable() {
-  locator.registerSingletonWithDependencies<RouteRefreshNotifier>(
-      () => RouteRefreshNotifier(),
-      dependsOn: [CacheInterface]);
+_setUpRouteNotifier() async {
+  serviceLocator.registerLazySingleton<RouteRefreshNotifier>(
+    () => RouteRefreshNotifier(),
+  );
 }
 
-_initializeRouter() {
-  locator.registerSingletonWithDependencies<AppRouter>(() => AppRouter(),
-      dependsOn: [RouteRefreshNotifier, CacheInterface]);
+_setUpAppRouter() {
+  serviceLocator.registerLazySingleton<AppRouter>(
+    () {
+      return AppRouter();
+    },
+  );
 }
 
 Dio _configureDio() {

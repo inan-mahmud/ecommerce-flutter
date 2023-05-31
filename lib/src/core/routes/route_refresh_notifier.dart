@@ -1,26 +1,25 @@
+import 'dart:async';
+
 import 'package:ecommerce_flutter/src/core/utils/helpers/auth_helper.dart';
 import 'package:flutter/material.dart';
 
 class RouteRefreshNotifier extends ChangeNotifier {
-  bool? _loginState;
-  bool? _initialized;
+  bool? _isLoggedIn;
+  bool? _isInitialized;
 
   Future<void> onAppStart() async {
-    _loginState = AuthHelper.fetchLoginState();
+    _isLoggedIn = AuthHelper.fetchLoginState();
+    _isInitialized = true;
     notifyListeners();
   }
 
-  void updateLoginState(bool state) async {
+  Future<void> updateLoginState(bool state) async {
     await AuthHelper.saveLoginState(state);
-    _loginState = state;
+    _isLoggedIn = state;
     notifyListeners();
   }
 
-  void initialize(bool value) {
-    _initialized = value;
-    notifyListeners();
-  }
+  bool get isLoggedIn => _isLoggedIn ?? false;
 
-  bool get loginState => _loginState ?? false;
-  bool get initialized => _initialized ?? false;
+  bool get isInitialized => _isInitialized ?? false;
 }

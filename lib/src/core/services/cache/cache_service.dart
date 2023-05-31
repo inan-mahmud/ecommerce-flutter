@@ -6,6 +6,14 @@ class CacheService<T> implements CacheInterface<T> {
 
   CacheService(this.preferences);
 
+  // CacheService() {
+  //   _init();
+  // }
+
+  // _init() async {
+  //   preferences = await serviceLocator.getAsync<SharedPreferences>();
+  // }
+
   @override
   bool containsKey({required String key}) {
     return preferences.containsKey(key);

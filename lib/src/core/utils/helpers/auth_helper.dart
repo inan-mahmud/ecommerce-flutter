@@ -1,18 +1,15 @@
-import 'package:ecommerce_flutter/src/core/di/locator.dart';
+import 'package:ecommerce_flutter/src/core/di/service_locator.dart';
 import 'package:ecommerce_flutter/src/core/services/cache/cache_interface.dart';
+import 'dart:developer';
 
 const authToken = 'token';
 const loginKey = 'login';
 
 class AuthHelper {
-  static final _cacheService = locator<CacheInterface>();
+  static final _cacheService = serviceLocator.get<CacheInterface>();
 
   static Future<bool> saveToken(String token) async {
-    try {
-      return await _cacheService.save(key: authToken, value: token);
-    } catch (e) {
-      return Future.value(false);
-    }
+    return await _cacheService.save(key: authToken, value: token);
   }
 
   static String? fetchToken() {
@@ -24,7 +21,9 @@ class AuthHelper {
   }
 
   static bool fetchLoginState() {
-    return _cacheService.read(key: loginKey) ?? false;
+    final state = _cacheService.read(key: loginKey) ?? false;
+    log('FetchLoginState $state');
+    return state;
   }
 
   static Future<bool> deleteToken() async {
